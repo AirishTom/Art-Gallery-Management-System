@@ -1,4 +1,5 @@
 <?php
+session_start();
 $mysql_host="localhost";
 $mysql_user="root";
 $mysql_password="";

@@ -1,7 +1,7 @@
 
 <?php
 include('connection.php');
-session_start();
+
 $error = "Invalid Email or Password";
 
 if(isset($_POST['submit']))
@@ -30,7 +30,7 @@ if(isset($_POST['submit']))
        <script>indow.alert('welcome user');</script>
         </script>";
   
-        header("location:customer/index.php");
+        header("location:index.php");
         exit(0);
       }
       
@@ -42,7 +42,7 @@ if(isset($_POST['submit']))
         echo "<script>
         window.alert('welcome artist');
         </script>";
-        header("location:artist.php");
+        header("location:../artist.php");
         
         exit(0);
       }
@@ -54,7 +54,7 @@ if(isset($_POST['submit']))
         echo "<script>
         window.alert('welcome admin');
         </script>";
-        header("location:Admin/template/index.php");
+        header("location:../Admin/template/index.html");
         
         exit(0);
       }
@@ -132,11 +132,11 @@ if(isset($_POST['submit']))
             <ul class="nav-menu">
               <li class="menu-active"><a href="index.php">Home</a></li>
               <li><a href="about.php">About</a></li>
-              <li><a href="gallery.php">Artists</a></li>
-              <li><a href="event.php">Paintings</a></li>
+              <!-- <li><a href="gallery.php">Artists</a></li>
+              <li><a href="event.php">Paintings</a></li> -->
               <li><a href="logindex.php">Sign in</a></li>
               <li><a href="register.php">Sign up</a></li>
-              <!-- <li><a href="contact.php">Contact</a></li> -->
+              <!-- <li><a href="contact.php">Contact</a></li>   -->
              <!-- <li class="menu-has-children"><a href="">Pages</a>
                
               </li>	-->		          
@@ -167,7 +167,7 @@ if(isset($_POST['submit']))
                                 <input type="checkbox" id="remenber" name="remenber" value="remenber">
                                 <label for="remenber"> Remember me?</label>
                             </div>
-                            <a href="forgot.php" class="forgot">Forgot password?</a>
+                            <a href="#url" class="forgot">Forgot password?</a>
                         </div>
                         <button class="btn btn-primary btn-block" type="submit" name="submit">Log In</button>
                     </form>

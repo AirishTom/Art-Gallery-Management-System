@@ -1,49 +1,21 @@
 <?php
 include("connection.php");
 
-if(isset($_POST['submit']))
+if(isset($_POST['update']))
 {
 $name = $_POST['name'];
 $phone = $_POST['phone'];
 $address = $_POST['address'];
 $email = $_POST['email'];
-$password = $_POST['password'];
-$cpassword =$_POST['cpassword'];
-$type=$_POST['type'];
+$currentuser= $_SESSION['email'];
 
-//  $a = "INSERT INTO `tbl_reg`( `name`, `phone`, `address`) VALUES('$name','$phone','$address')";
-//  $sql=mysqli_query($conn,$a);
-// $id = mysqli_insert_id($conn);
-//  $sql1 = "INSERT INTO `tbl_login`(`reg_id`,`email`,`password`,`type`) VALUES ('$id','$email','$password','$type')";
-//  $qry = mysqli_query($conn,$sql1);
+$newp = "UPDATE `tbl_reg` SET `name`='$name',`phone`='$phone',`address`='$address'  WHERE `email`='$currentuser'";
+$runnewp = mysqli_query($conn, $newp);
 
- $query2=mysqli_query($conn,"SELECT `name` FROM tbl_reg where name='".$name."'");
- if(mysqli_num_rows($query2)==0)
- {
-  
-  $query = mysqli_query($conn,"INSERT INTO tbl_reg(name,phone, address,email) VALUES('$name','$phone','$address','$email')");
-  $sql1 = "INSERT INTO `tbl_login`(`reg_id`,`email`,`password`,`type`) VALUES ('$id','$email','$password','$type')";
-  $qry = mysqli_query($conn,$sql1);
- }
- else
- {
-   echo "<script>
-   alert('User name already exist');
-   window.location.href='register.php';
-  </script>";
-  }
- 
+echo '<script>alert("Profile updated.");</script>';
+echo '<script>window.location.href="myprofile.php";</script>';
+}
 
- if($query==TRUE)
-{
-	echo "<script>alert('User registered Successfully!!');window.location='logindex.php'</script>";
-}
-else
-{
-	echo "Error".$sql."<br>".$conn->error;
-}
-$conn->close();
-}
 ?>
 
 
@@ -77,8 +49,8 @@ $conn->close();
         <link rel="stylesheet" href="css/owl.carousel.css">
         <link rel="stylesheet" href="css/main.css">
     
-<title>REGISTRATION FORM</title>
-<link rel="stylesheet" type="text/css" href="./style.css">
+<title>USER PROFILE</title>
+<link rel="stylesheet" type="text/css" href="./styleprof.css">
 </head>
 <body>
   <header id="header" >
@@ -94,8 +66,12 @@ $conn->close();
               <li><a href="about.php">About</a></li>
               <!-- <li><a href="gallery.php">Artists</a></li> -->
               <li><a href="ticket.php">PAINTINGS</a></li>
+              <li><a href="myprofile.php">My Profile</a></li>
+						  <li><a href="change-pass.php">Change Password</a></li>
               <li><a href="logindex.php">Sign in</a></li>
-              <li class="menu-active"><a href="register.php">Sign up</a></li>
+              <li><a href="logout.php">Signout</a></li>
+
+              <!-- <li class="menu-active"><a href="register.php">Sign up</a></li> -->
 
               <!-- <li><a href="contact.php">Contact</a></li> -->
              <!-- <li class="menu-has-children"><a href="">Pages</a>
@@ -107,9 +83,22 @@ $conn->close();
     </div>
   </header>
     <div class="registration-form">
-        <h1>registration form</h1>
+        <h1>User Proffile</h1>
         <form action="#" method="POST">
-            <input type="text" name="name" id="name" placeholder="Name" required onchange="Validstr()";/>
+        <?php
+$currentuser= $_SESSION['email'];
+$sql="SELECT * FROM `tbl_reg` WHERE email='$currentuser'";
+$gotresult=mysqli_query($conn,$sql);
+if($gotresult)
+{
+    if(mysqli_num_rows($gotresult) > 0)
+    {
+        while($row=mysqli_fetch_array($gotresult))
+        {
+            //print_r($row['email']);
+            ?>
+
+            <input type="text" name="name" id="name" placeholder="Name" value= "<?php echo$row['name'];?>" required onchange="Validstr()";/>
             <br><br>
             <span id="msg1" style="color:red;"></span>
                         <script>
@@ -127,7 +116,7 @@ $conn->close();
                         }
                    </script>
                         
-            <input type="text" name="phone" placeholder="Phone Number"  id="phno" required onchange="Validphone()"/>
+            <input type="text" name="phone" placeholder="Phone Number"  id="phno" value= "<?php echo$row['phone'];?>"required onchange="Validphone()"/>
             <br><br>
             <span id="msg7" style="color:red;"></span>
                         <script>
@@ -143,25 +132,24 @@ $conn->close();
                             document.getElementById('msg7').innerHTML=" ";
                           return true;
                         }
+                        
                        </script>
 
            
-            <input type="text" name="address" placeholder="Address" required="">
+            <input type="text" name="address" placeholder="Address" value= "<?php echo$row['address'];?>"required="">
             <br><br>
-            <input type="email" name="email" placeholder="Email" required="">
-            <br><br>
-            <input type="password" name="password" placeholder="Password" required="" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"/>
-           <br><br>
-            <input type="password" name="cpassword" placeholder="Confirm Password" required="" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Should be same as password"/><br><br>
-           
-            <select id="iam" name="type" placeholder="I am" required="">
-           
-            <option value="">I am</option>
-             <option value="customer">customer</option>
-             <option value="artist">artist</option>
-            </select>
-            <button type="submit" name="submit">Registration</button>
+            <!-- <input type="email" name="email" placeholder="Email" value= "<?php echo$row['email'];?>"required="">
+            <br><br> -->
+          
+            <button type="submit" name="update">Update</button>
+          
             </form>
+            
+            <?php
+        }
+    }
+}
+   ?>    
             </div>
             </body> 
             <html>

@@ -1,3 +1,6 @@
+<?php
+include("connection.php");
+?>	
 	<!DOCTYPE html>
 	<html lang="zxx" class="no-js">
 	<head>
@@ -60,11 +63,15 @@
 				        <ul class="nav-menu">
 				          <li class="menu-active"><a href="index.php">Home</a></li>
 				          <li><a href="about.php">ABOUT</a></li>
-				          <li><a href="gallery.php">GALLERY</a></li>
-				          <li><a href="event.php">ARTISTS</a></li>
+				          <!-- <li><a href="gallery.php">GALLERY</a></li>
+				          <li><a href="event.php">ARTISTS</a></li> -->
 				          <li><a href="ticket.php">PAINTINGS</a></li>
-				          <li><a href="logindex.php">SINGIN</a></li>
-				          <li><a href="register.php">SIGNUP</a></li>
+				          <!-- <li><a href="logindex.php">SINGIN</a></li> -->
+						  <li><a href="myprofile.php">My Profile</a></li>
+						  <li><a href="change-pass.php">Change Password</a></li>
+						  <li><a href="logout.php">Signout</a></li>
+				         
+
 				          <!-- <li class="menu-has-children"><a href="">Pages</a> -->
 				            <ul>
 				              <li><a href="blog-single.html">Blog Single</a></li>
@@ -105,8 +112,67 @@
 								<p>Who are in extremely love with eco friendly system.</p>
 							</div>
 						</div>
-					</div>						
-					<div class="row">
+					</div>			
+					
+          
+					
+			<div class="conatainer py-5">
+				<div class="row mt-4">
+					
+					<?php 
+					$query= "SELECT * FROM tbl_art";
+					$query_run = mysqli_query($conn, $query);
+					$check_tbl_art = mysqli_num_rows($query_run) > 0;
+					
+					
+				if($check_tbl_art)
+				{
+				   while($row = mysqli_fetch_assoc($query_run))
+				   {
+                       
+						?>
+
+						<div class="col-md-3 mt-3">
+							<div class="card">
+							<img src="../Admin/template/pages/forms/image/<?php echo $row['image'];?> " width="253px" height="200px" alt="Art Images"/>
+								<div class="card-body">
+								<h4 class="card-title"><?php echo $row['artname']; ?></h4>
+								<h3 class="card-title"><?php echo $row['artistname']; ?></h3>
+								<h2 class="card-title"><?php echo $row['price']; ?></h2>
+								<p class="card-text">
+								     <?php echo $row['desc']; ?><br><br>	
+							   <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to Cart</a>
+
+								</p>
+								</div>	  
+							</div>
+						</div>
+						<?php
+					  
+				   }
+				}
+				else
+				{
+					echo "No Art Found";
+				}
+
+				
+
+					?>
+					
+					 
+
+				
+                </div>
+            </div>
+
+	
+					
+
+           
+
+
+					<!--<div class="row">
 						<div class="col-lg-4 col-md-6 single-exhibition">
 							<div class="thumb">
 								<img class="img-fluid" src="img/pages/ex1.jpg" alt="">						
@@ -187,7 +253,7 @@
 						</div>																	
 					</div>
 				</div>	
-			</section>
+			</section>-->
 			<!-- End upcoming-exibition Area -->
 			
 			

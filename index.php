@@ -1,3 +1,6 @@
+	<?php
+	include "connection.php";
+	?>
 	<!DOCTYPE html>
 	<html lang="zxx" class="no-js">
 	<head>
@@ -47,20 +50,33 @@
 			  	</div>
 			  	<hr>
 			    <div class="container">
+				
 			    	<div class="row align-items-center justify-content-between d-flex">
 				      <!--<div id="logo">
 				        <a href="index.html"><img src="img/logo.jpg" alt="" title="" /></a>
-				      </div>-->&nbsp;&nbsp;&nbsp;
-				      <nav id="nav-menu-container">
+				      </div>-->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				      <nav id="nav-menu-container"> 
 						  
 				        <ul class="nav-menu">
-				          <li class="menu-active"><a href="index.php">Home</a></li>
+				          <li>
+
+						   <!-- class="menu-active">						 -->
+						 
+
+						<a href="index.php">Home</a></li>
 				          <li><a href="about.php">About</a></li>
-				          <li><a href="event.php">Artists</a></li>
+				          <!-- <li><a href="event.php">Artists</a></li> -->
 				          <li><a href="ticket.php">Paintings</a></li>
-				          <li><a href="logindex.php">Sign in</a></li>
-				          <li><a href="register.php">Sign up</a></li>
+				          <!-- <li><a href="logindex.php">Sign in</a></li>
+				          <li><a href="register.php">Sign up</a></li> -->
 				          <!-- <li><a href="contact.php">Contact</a></li> -->
+						  <li><a href="myprofile.php">My Profile</a></li>
+						  <li><a href="change-pass.php">Change Password</a></li>
+						  <li><a href="logout.php">Signout</a></li>
+
+
+						  <!-- <li><img src="/artgallery/customer/cart/a.png" height="30px" width="30px" alt=""></li> -->
+
 				         <!-- <li class="menu-has-children"><a href="">Pages</a>
 				           
 				          </li>	-->		          
@@ -82,7 +98,28 @@
 								WELCOME TO ART GALLERY				
 							</h1>
 							<p class="pt-20 pb-20 text-white">
-								Explore the world's most powerful, automated, and trusted art gallery management software.....!
+
+							<?php
+					
+					$currentuser=$_SESSION['email'];
+					$sql="SELECT * FROM `tbl_login` WHERE email='$currentuser'";
+					$result=mysqli_query($conn,$sql);
+					if($result)
+					{
+						if(mysqli_num_rows($result) > 0)
+						{
+							while($row=mysqli_fetch_array($result))
+							{
+								?>
+								<h1 style="color:#f2f2f2">Hai, <?php echo$row['email'];?></h1>
+								<?php
+							}
+						}
+					}
+					?>
+
+
+
 							</p>
 							<!--<a href="#" class="primary-btn text-uppercase">Get Started</a> -->	
 						</div>											
@@ -92,7 +129,7 @@
 			<!-- End banner Area -->	
 
 			<!-- Start service Area -->
-			<section class="service-area pt-100" id="about">
+			<!-- <section class="service-area pt-100" id="about">
 				<div class="container">
 					<div class="row">
 						<div class="col-lg-4">
@@ -106,9 +143,9 @@
 							    <div class="text">
 							    	<br><br><br><br><p>
 							    		Ontime delivery of Artistic Works to customers
-							    	</p>
+							    	</p> -->
 							    <!--<a href="#" class="text-uppercase primary-btn">Buy ticket</a>-->
-							    </div>
+							    <!-- </div>
 							  </div>
 							</div>							
 						</div>
@@ -125,9 +162,9 @@
 							    <div class="text">
 							    	<br><br><br><br><p>
 							    		exhibition is traditionally the space in which art objects meet an audience
-							    	</p>
+							    	</p> -->
 							    	<!--<a href="#" class="text-uppercase primary-btn">Buy ticket</a>-->
-							    </div>
+							    <!-- </div>
 							  </div>
 							</div>							
 						</div>
@@ -144,19 +181,19 @@
 							    <div class="text">
 									<br><br><br><br><p>
 							    		Up-To-Date Opening Events........******!
-							    	</p>
+							    	</p> -->
 							    <!--<a href="#" class="text-uppercase primary-btn">Buy ticket</a>-->
-							    </div>
+							    <!-- </div>
 							  </div>
 							</div>							
 						</div>												
 					</div>
 				</div>	
-			</section>
+			</section> -->
 			<!-- End service Area -->
 			
 			<!-- Start quote Area -->
-			<section class="quote-area section-gap">
+			<!-- <section class="quote-area section-gap">
 				<div class="container">				
 					<div class="row">
 						<div class="col-lg-6 quote-left">
@@ -173,14 +210,14 @@
 						</div>
 					</div>
 				</div>	
-			</section>
+			</section> -->
 			<!-- End quote Area -->
 
 			
 			
 			
 			<!-- Start gallery Area -->
-			<section class="gallery-area section-gap" id="gallery">
+			<!-- <section class="gallery-area section-gap" id="gallery">
 				<div class="container">
 					<div class="row d-flex justify-content-center">
 						<div class="menu-content pb-70 col-lg-8">
@@ -207,7 +244,7 @@
 						<a class="single-gallery" href="img/g5.jpg"><img class="grid-item" src="img/g5.jpg"></a>						
 					</div>	
 				</div>	
-			</section>
+			</section> -->
 			<!-- End gallery Area -->
 			
 
