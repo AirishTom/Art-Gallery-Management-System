@@ -1,19 +1,21 @@
 <?php
 include("connection.php");
 if (isset($_POST['update'])) {
-  $old = $_POST['current'];
-  $new = $_POST['new'];
+  $old =md5($_POST['current']);
+  $new = md5($_POST['new']);
   $user = mysqli_real_escape_string($conn, $_SESSION['email']);
   $passCheck = "SELECT * FROM `tbl_login` WHERE `email`='$user'";
   $runQ = mysqli_query($conn, $passCheck);
   $row = mysqli_fetch_array($runQ);
-  if ($row['password'] != $old) {
-    echo '<script>alert("Old password doesnot match.");</script>';
-    echo '<script>window.location.href="change-pass.php";</script>';
-  } else {
+  $a=$row['password'];
+  if ($a == $old) {
     $newp = "UPDATE `tbl_login` SET `password`='$new' WHERE `email`='$user'";
     $runnewp = mysqli_query($conn, $newp);
     echo '<script>alert("Password updated.");</script>';
+    echo '<script>window.location.href="change-pass.php";</script>';
+   
+  } else {
+    echo '<script>alert("Old password doesnot match.");</script>';
     echo '<script>window.location.href="change-pass.php";</script>';
   }
 }

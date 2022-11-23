@@ -1,15 +1,32 @@
+
 <?php
-include("connection.php");
+$update=false;
+
+	include "connection.php";
+
+	$n=$_SESSION['email'];
+	if(!isset($n)){
+    session_destroy();
+    header('location:../logindex.php');
+    }
+	
+
+//$n=$_GET['name'];
+//$n=$_GET['username'];
+// echo "$n";
+// echo "$usr";
+// $n= $_SESSION['email'];
 
 if(isset($_POST['update']))
 {
 $name = $_POST['name'];
 $phone = $_POST['phone'];
 $address = $_POST['address'];
-$email = $_POST['email'];
+$pincode = $_POST['pincode'];
+//  $email = $_POST['email'];
 $currentuser= $_SESSION['email'];
 
-$newp = "UPDATE `tbl_reg` SET `name`='$name',`phone`='$phone',`address`='$address'  WHERE `email`='$currentuser'";
+$newp = "UPDATE `tbl_reg` SET `name`='$name',`phone`='$phone',`address`='$address', `pincode`='$pincode' WHERE `email`='$currentuser'";
 $runnewp = mysqli_query($conn, $newp);
 
 echo '<script>alert("Profile updated.");</script>';
@@ -66,9 +83,16 @@ echo '<script>window.location.href="myprofile.php";</script>';
               <li><a href="about.php">About</a></li>
               <!-- <li><a href="gallery.php">Artists</a></li> -->
               <li><a href="ticket.php">PAINTINGS</a></li>
+              	 
               <li><a href="myprofile.php">My Profile</a></li>
 						  <li><a href="change-pass.php">Change Password</a></li>
-              <li><a href="logindex.php">Sign in</a></li>
+              <li> <?php
+      $select_rows = mysqli_query($conn, "SELECT * FROM `tbl_cart` where username='$n'") or die('query failed');
+      $row_count = mysqli_num_rows($select_rows);
+
+      ?>
+<li>
+<a href="viewcart.php"><i class="fa fa-shopping-cart" aria-hidden="true"></i> <span>Cart <span><?=$row_count;?></span></span></a></li>
               <li><a href="logout.php">Signout</a></li>
 
               <!-- <li class="menu-active"><a href="register.php">Sign up</a></li> -->
@@ -97,6 +121,7 @@ if($gotresult)
         {
             //print_r($row['email']);
             ?>
+           <p>Full Name</p>
 
             <input type="text" name="name" id="name" placeholder="Name" value= "<?php echo$row['name'];?>" required onchange="Validstr()";/>
             <br><br>
@@ -115,7 +140,8 @@ if($gotresult)
                          return true;
                         }
                    </script>
-                        
+            <p>Phone Number</p>
+          
             <input type="text" name="phone" placeholder="Phone Number"  id="phno" value= "<?php echo$row['phone'];?>"required onchange="Validphone()"/>
             <br><br>
             <span id="msg7" style="color:red;"></span>
@@ -134,12 +160,31 @@ if($gotresult)
                         }
                         
                        </script>
+                   
+            <p>Address</p>
 
-           
-            <input type="text" name="address" placeholder="Address" value= "<?php echo$row['address'];?>"required="">
+            <input type="text" name="address" placeholder="Address" id="contact-address" value= "<?php echo$row['address'];?>"required="">
             <br><br>
-            <!-- <input type="email" name="email" placeholder="Email" value= "<?php echo$row['email'];?>"required="">
-            <br><br> -->
+            <p>Pincode</p>
+
+            <input type="text" name="pincode" placeholder="Pincode"    id="pincode"  value= "<?php echo$row['pincode'];?>"required onchange="Validpincode()"/>
+            <br><br>
+            <span id="msg8" style="color:red;"></span>
+            <script>
+                        function Validpincode() 
+                        {
+                        var val = document.getElementById('pincode').value;
+                          if (!val.match(/^[6][0-9]{5}$/))
+                           {
+                            document.getElementById('msg8').innerHTML="Only Numbers are allowed and must contain 6 digits starting with 6 ";
+                                  document.getElementById('pincode').value = "";
+                                    return false;
+                           }
+                            document.getElementById('msg8').innerHTML=" ";
+                          return true;
+                        }
+                       </script>
+
           
             <button type="submit" name="update">Update</button>
           

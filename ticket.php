@@ -1,6 +1,47 @@
 <?php
-include("connection.php");
-?>	
+$update=false;
+
+	include "connection.php";
+
+	$n=$_SESSION['email'];
+	if(!isset($n)){
+    session_destroy();
+    header('location:../logindex.php');
+    }
+
+
+//$n=$_GET['name'];
+//$n=$_GET['username'];
+// echo "$n";
+// echo "$usr";
+$n= $_SESSION['email'];
+if(isset($_POST['submit']))
+{
+  $productname=$_POST['p_name'];
+  // echo "$productname";
+  $sql2="select * from tbl_art where artname='".$productname."'";
+
+
+  $ress=mysqli_query($conn,$sql2);
+  $row=mysqli_fetch_array($ress);
+  $pprice=$row['price'];
+  $pid=$row['art_id'];
+  $pimg=$row['image'];
+
+
+$sql3="INSERT INTO `tbl_cart`(`artid`, `username`, `name`,`price`,`image`) VALUES ('$pid','$n','$productname','$pprice','$pimg')";
+$res2=mysqli_query($conn,$sql3);
+if($res2)
+
+    {
+        echo "<script>alert('art Added to cart Successfully!!');</script>";
+      }
+      }
+
+?>
+
+
+
 	<!DOCTYPE html>
 	<html lang="zxx" class="no-js">
 	<head>
@@ -34,13 +75,24 @@ include("connection.php");
 		</head>
 		<body>
 
+
+		<?php
+
+if(isset($message)){
+   foreach($message as $message){
+      echo '<div class="message"><span>'.$message.'</span> <i class="fas fa-times" onclick="this.parentElement.style.display = `none`;"></i> </div>';
+   };
+};
+
+?>
+
 			  <header id="header" id="home">
 			  	<div class="container header-top">
 			  		<div class="row">
 				  		<div class="col-6 top-head-left">
 				  			<ul>
-				  				<li><a href="#">Visit Us</a></li>
-				  				<li><a href="#">Buy Ticket</a></li>
+				  				<!-- <li><a href="#">Visit Us</a></li>
+				  				<li><a href="#">Buy Ticket</a></li> -->
 				  			</ul>
 				  		</div>
 				  		<div class="col-6 top-head-right">
@@ -62,13 +114,24 @@ include("connection.php");
 				      <nav id="nav-menu-container">
 				        <ul class="nav-menu">
 				          <li class="menu-active"><a href="index.php">Home</a></li>
-				          <li><a href="about.php">ABOUT</a></li>
+				          <li><a href="about.php">About</a></li>
 				          <!-- <li><a href="gallery.php">GALLERY</a></li>
 				          <li><a href="event.php">ARTISTS</a></li> -->
-				          <li><a href="ticket.php">PAINTINGS</a></li>
+				          <li><a href="ticket.php">Paintings</a></li>
 				          <!-- <li><a href="logindex.php">SINGIN</a></li> -->
 						  <li><a href="myprofile.php">My Profile</a></li>
 						  <li><a href="change-pass.php">Change Password</a></li>
+
+						  <li>	  <?php
+      
+      $select_rows = mysqli_query($conn, "SELECT * FROM `tbl_cart` where username='$n'") or die('query failed');
+      $row_count = mysqli_num_rows($select_rows);
+
+      ?>
+<li>
+<a href="viewcart.php"><i class="fa fa-shopping-cart" aria-hidden="true"></i> <span>Cart <span><?=$row_count;?></span></span></a></li>
+						  <!-- <li><a href="checkout.php">My Cart</a></li> -->
+
 						  <li><a href="logout.php">Signout</a></li>
 				         
 
@@ -132,21 +195,47 @@ include("connection.php");
                        
 						?>
 
+                       
+
+
 						<div class="col-md-3 mt-3">
+					
 							<div class="card">
 							<img src="../Admin/template/pages/forms/image/<?php echo $row['image'];?> " width="253px" height="200px" alt="Art Images"/>
 								<div class="card-body">
-								<h4 class="card-title"><?php echo $row['artname']; ?></h4>
-								<h3 class="card-title"><?php echo $row['artistname']; ?></h3>
-								<h2 class="card-title"><?php echo $row['price']; ?></h2>
-								<p class="card-text">
-								     <?php echo $row['desc']; ?><br><br>	
-							   <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to Cart</a>
+								<h5 class="card-title" name="product_name"><?php echo $row['artname']; ?></h5>
+								<h4 class="card-title" name="product_price" ><?php echo $row['artistname']; ?></h4>
+
+								
+								<h3 class="card-title" name="product_image"><?php echo $row['price']; ?></h3>
+								<h6 class="card-title">Stock:<?php echo $row['quantity']; ?></h6>
+								<p class="card-text"><?php echo $row['desc']; ?><br><br>
+
+								<form method="post" action="">
+
+								<input type="hidden" name="p_name" value="<?=$row['artname'];?>" >
+
+                   <a  role="button" ><button type="submit" name="submit" class="btn btn-primary" id="viewbtn"></a>
+                      Add to Cart
+                    </button>
+
+
+							    <!-- <input type="submit" class="btn" value="add to cart" name="add_to_cart"> -->
+	
+							   <!-- <a href="cart.php"   name="add_to_cart" class="btn btn-default add-to-cart"><i name="add_to_cart" class="fa fa-shopping-cart"></i>Add to Cart</a> -->
+
+
+
+
+
 
 								</p>
 								</div>	  
 							</div>
 						</div>
+
+						</form>
+
 						<?php
 					  
 				   }
@@ -321,6 +410,17 @@ include("connection.php");
 			<script src="js/parallax.min.js"></script>		
 			<script src="js/mail-script.js"></script>	
 			<script src="js/main.js"></script>	
+
+			
+			<script>
+  if ( window.history.replaceState ) {
+  window.history.replaceState( null, null, window.location.href );
+}
+</script>
+
+
+
+
 		</body>
 	</html>
 
